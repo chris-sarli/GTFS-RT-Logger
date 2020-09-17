@@ -1,0 +1,18 @@
+{
+  "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose up --build -d"
+    },
+    "clean" : {
+      "enabled" : true,
+      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose rm -f -s -v logger logger-database"
+    },
+    "run" : {
+      "enabled" : true,
+      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose restart logger"
+    }
+  },
+  "identifier" : "BDAE390C-9BFD-43B9-AF72-CF5F96155168",
+  "openLogOnRun" : "fail"
+}
