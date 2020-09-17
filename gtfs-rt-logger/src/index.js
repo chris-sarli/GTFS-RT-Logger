@@ -24,7 +24,7 @@ var protobuf = require("protobufjs");
 
 function log_rt() {
 	const fetch_positions = fetch(positions_url)
-	const updates_positions = fetch(updates_url)
+	const fetch_updates = fetch(updates_url)
 	
 	fetch_positions.then(res => res.buffer()).then(body => {
 		protobuf.load("static/gtfs-realtime.proto")
@@ -43,6 +43,27 @@ function log_rt() {
 			   const stopId = vehicle.stopId;
 			   const vehicleId = vehicle.vehicle.id;
 			   console.log(`${timestamp}: Bus ${vehicleId} @ Stop ${stopId} (${currentStatus}) on ${trip.tripId} (${trip.routeId}), ${position.latitude}, ${position.longitude}, bearing ${position.bearing}, ${position.speed}mph`);
+		   }
+		   
+		});
+	}).catch((error) => {
+		console.error(error);
+	});
+	
+	fetch_updates.then(res => res.buffer()).then(body => {
+		protobuf.load("static/gtfs-realtime.proto")
+		.then(function(root) {
+		   var FeedMessage = root.lookupType("transit_realtime.FeedMessage")
+		   
+		   var message = FeedMessage.decode(body);
+		   var entity = message.entity;
+		   
+		   for (item in entity) {
+			   const tripUpdate = entity[item].tripUpdate;
+			   const trip = tripUpdate.trip;
+			   const timestamp = tripUpdate.timestamp.low;
+			   const stopTimeUpdates = tripUpdate.stopTimeUpdate;
+			   console.log(`${timestamp}: ${trip.tripId} (${trip.routeId}) | ${trip.scheduleRelationship} | ${stopTimeUpdates.length} Updates`);
 		   }
 		   
 		});
