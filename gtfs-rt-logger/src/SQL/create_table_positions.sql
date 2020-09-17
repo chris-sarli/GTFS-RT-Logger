@@ -1,4 +1,4 @@
-create table if not exists pos
+create table if not exists position
 (
 	timestamp int,
 	bus_id smallint,
@@ -11,10 +11,10 @@ create table if not exists pos
 	speed real
 );
 
-create unique index pos_timestamp_bus_id_uindex
-	on pos (timestamp, bus_id);
+create unique index position_timestamp_bus_id_uindex
+	on position (timestamp, bus_id);
 
-alter table pos
-	add constraint pos_pk
+alter table position
+	add constraint position_pk
 		primary key (timestamp, bus_id);
 

@@ -19,18 +19,26 @@ function log_rt() {
 		   
 		   for (item in entity) {
 			   const vehicle = entity[item].vehicle;
-			   const trip = vehicle.trip;
+			   const tripId = vehicle.trip.tripId;
 			   const position = vehicle.position;
+			   const lat = position.latitude;
+			   const lon = position.longitude;
+			   const bearing = position.bearing;
+			   const speed = position.speed;
 			   const currentStatus = vehicle.currentStatus;
 			   const timestamp = vehicle.timestamp.low;
 			   const stopId = vehicle.stopId;
 			   const vehicleId = vehicle.vehicle.id;
-			   console.log(`${timestamp}: Bus ${vehicleId} @ Stop ${stopId} (${currentStatus}) on ${trip.tripId} (${trip.routeId}), ${position.latitude}, ${position.longitude}, bearing ${position.bearing}, ${position.speed}mph`);
+			   // console.log(`${timestamp}: Bus ${vehicleId} @ Stop ${stopId} (${currentStatus}) on ${trip.tripId} (${trip.routeId}), ${position.latitude}, ${position.longitude}, bearing ${position.bearing}, ${position.speed}mph`);
+			   
+			   db.insert_position(timestamp, vehicleId, stopId, currentStatus, tripId, lat, lon, bearing, speed);
 		   }
 		   
 		});
-	}).catch((error) => {
-		console.error(error);
+	}).catch((err) => {
+		if (err.routine != "_bt_check_unique") {
+			console.error(err);
+		}
 	});
 	
 	fetch_updates.then(res => res.buffer()).then(body => {
@@ -46,15 +54,19 @@ function log_rt() {
 			   const trip = tripUpdate.trip;
 			   const timestamp = tripUpdate.timestamp.low;
 			   const stopTimeUpdates = tripUpdate.stopTimeUpdate;
-			   console.log(`${timestamp}: ${trip.tripId} (${trip.routeId}) | ${trip.scheduleRelationship} | ${stopTimeUpdates.length} Updates`);
+			   // console.log(`${timestamp}: ${trip.tripId} (${trip.routeId}) | ${trip.scheduleRelationship} | ${stopTimeUpdates.length} Updates`);
+			   
+			   db.insert_updates(timestamp, trip.tripId, trip.scheduleRelationship, stopTimeUpdates);
 		   }
 		   
 		});
-	}).catch((error) => {
-		console.error(error);
+	}).catch((err) => {
+		if (err.routine != "_bt_check_unique") {
+			console.error(err);
+		}
 	});
 	
 }
 db.initialize_tables();
-// log_rt();
+log_rt();
 // setInterval(log_rt, 1000*15);
