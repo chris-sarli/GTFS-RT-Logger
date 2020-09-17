@@ -1,8 +1,12 @@
 {
   "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose up --build -d"
+    },
     "clean" : {
       "enabled" : true,
-      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose down -v --remove-orphans --rmi local"
+      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose rm -f -s -v logger"
     },
     "run" : {
       "enabled" : true,
