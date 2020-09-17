@@ -1,0 +1,28 @@
+version: "3.5"
+services:
+    logger:
+        container_name: logger
+        build: ./gtfs-rt-logger
+        links:
+            - database:database
+        env_file:
+            - main.env
+        ports:
+              - "8080:8080"
+        depends_on:
+            - database
+        volumes:
+            - ./gtfs-rt-logger:/app
+
+    database:
+        container_name: gtfs-rt-database
+        restart: always
+        image: postgres:latest
+        volumes:
+            - db-data:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        env_file:
+            - main.env
+volumes:
+    db-data:

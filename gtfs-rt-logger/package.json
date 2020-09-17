@@ -1,0 +1,18 @@
+{
+  "name": "gtfs-rt-logger",
+  "version": "1.0.0",
+  "description": "Logs GTFS-RT Feed.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chris Sarli",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "gtfs-realtime-bindings": "0.0.6",
+    "node-fetch": "^2.6.1",
+    "pg": "^8.3.3"
+  }
+}
