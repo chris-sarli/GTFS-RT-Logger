@@ -69,4 +69,4 @@ function log_rt() {
 }
 db.initialize_tables();
 log_rt();
-// setInterval(log_rt, 1000*15);
+setInterval(log_rt, 1000*15);
