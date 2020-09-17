@@ -3,19 +3,24 @@ services:
     logger:
         container_name: logger
         build: ./gtfs-rt-logger
+        restart: always
+        ports:
+            - "80:5000"
         links:
-            - database:database
+            - logger-database:logger-database
+        volumes:
+            - ./gtfs-rt-logger:/usr/src/app
+            - /usr/src/app/node_modules
+        ports:
+            - 3000:3000
+            - 9229:9229
         env_file:
             - main.env
-        ports:
-              - "8080:8080"
+        command: npm start
         depends_on:
-            - database
-        volumes:
-            - ./gtfs-rt-logger:/app
-
-    database:
-        container_name: gtfs-rt-database
+            - logger-database
+    logger-database:
+        container_name: database
         restart: always
         image: postgres:latest
         volumes:
