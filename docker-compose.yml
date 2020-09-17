@@ -3,7 +3,7 @@ services:
     logger:
         container_name: logger
         build: ./gtfs-rt-logger
-        restart: always
+        # restart: always
         ports:
             - "80:5000"
         links:

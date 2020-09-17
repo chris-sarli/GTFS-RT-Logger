@@ -1,8 +1,11 @@
 const { Client } = require('pg');
-const { protobuf } = require('protobufjs');
+// const { protobuf } = require('protobufjs');
 const fetch = require('node-fetch');
-var GtfsRealtimeBindings = require('gtfs-realtime-bindings');
+const fs = require('fs');
+// var GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 const url = process.env.GTFS_RT_URL;
+var protobuf = require("protobufjs");
+// console.log(protobuf);
 // 
 // details = {
 // 	user: process.env.POSTGRES_USER,
@@ -21,17 +24,23 @@ const url = process.env.GTFS_RT_URL;
 // })
 
 function log_rt() {
-	console.log("hello there!");
-	// fetch(url).then(res => res.text()).then(body => {
-	// 	var feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(body);
-	// 	feed.entity.forEach(function(entity) {
-	// 	  if (entity.trip_update) {
-	// 		console.log(entity.trip_update);
-	// 	  }
-	// 	});
-	// }).catch((error) => {
-	// 	console.error(error);
-	// });
+	fetch(url).then(res => res.buffer()).then(body => {
+		protobuf.load("static/gtfs-realtime.proto")
+		.then(function(root) {
+		   var FeedMessage = root.lookupType("transit_realtime.FeedMessage")
+		   
+		   var message = FeedMessage.decode(body);
+		   var entity = message.entity;
+		   // console.log(entity);
+		   for (item in entity) {
+			   console.log(entity[item]);
+		   }
+		   
+		});
+	}).catch((error) => {
+		console.error(error);
+	});
+	
 }
-// log_rt();
-setInterval(log_rt, 1000*1);
+log_rt();
+// setInterval(log_rt, 1000*15);
