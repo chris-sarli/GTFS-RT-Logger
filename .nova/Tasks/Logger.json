@@ -6,7 +6,7 @@
     },
     "clean" : {
       "enabled" : true,
-      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose rm -f -s -v logger"
+      "script" : "cd ~\/GTFS-RT-Logger\ndocker-compose rm -f -s -v logger logger-database"
     },
     "run" : {
       "enabled" : true,

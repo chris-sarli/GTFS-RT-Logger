@@ -1,26 +1,9 @@
-const { Client } = require('pg');
 const fetch = require('node-fetch');
-const fs = require('fs');
 const positions_url = process.env.GTFS_RT_URL_VEHICLEPOSITIONS;
 const updates_url = process.env.GTFS_RT_URL_TRIPUPDATES;
 var protobuf = require("protobufjs");
+const db = require('./db');
 
-
-// details = {
-// 	user: process.env.POSTGRES_USER,
-// 	host: process.env.POSTGRES_HOST,
-// 	database: process.env.POSTGRES_DB,
-// 	password: process.env.POSTGRES_PASSWORD,
-// 	port: process.env.POSTGRES_PORT
-// };
-// 
-// client = new Client(details);
-// 
-// client.connect()
-// client.query('SELECT NOW()', (err, res) => {
-//   console.log(err, res)
-//   client.end()
-// })
 
 function log_rt() {
 	const fetch_positions = fetch(positions_url)
@@ -72,5 +55,6 @@ function log_rt() {
 	});
 	
 }
-log_rt();
+db.initialize_tables();
+// log_rt();
 // setInterval(log_rt, 1000*15);

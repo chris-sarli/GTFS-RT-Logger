@@ -11,9 +11,6 @@ services:
         volumes:
             - ./gtfs-rt-logger:/usr/src/app
             - /usr/src/app/node_modules
-        ports:
-            - 3000:3000
-            - 9229:9229
         env_file:
             - main.env
         command: npm start
