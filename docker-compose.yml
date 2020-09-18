@@ -17,7 +17,7 @@ services:
         depends_on:
             - logger-database
     logger-database:
-        container_name: database
+        container_name: logger-database
         restart: always
         image: postgres:latest
         volumes:
